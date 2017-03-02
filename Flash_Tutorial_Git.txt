@@ -1,0 +1,27 @@
+Creating a repository on GitHub step by step
+
+0 - Ir para https://github.com e criar um novo repositorio
+
+1 - Criar diretorio do projeto: mkdir nomedoprojeto
+
+2 - Ir para o novo diretorio: cd nomedoprojeto
+
+3 - Iniciar um git no novo diretorio: git init
+
+4 - Fazer o commit inicial: git commit -m "First commit"
+
+5 - Adicionar o repositorio criado ao github:
+	git remote add origin git@github.com:jrobertolima/nomedoprojeto.git
+	
+6 - Enviar primeiro commit: git push -u origin master
+
+
+Para enviar um repositorio já existente, basta seguir os passo 0, 5 e 6.
+
+0 - Ir para https://github.com e criar um novo repositorio
+
+5 - Adicionar o repositorio criado ao github:
+	git remote add origin git@github.com:jrobertolima/nomedoprojeto.git
+	
+6 - Enviar primeiro commit: git push -u origin master
+
