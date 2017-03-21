@@ -1,4 +1,4 @@
-Creating a repository on GitHub step by step
+﻿Creating a repository on GitHub step by step
 
 0 - Ir para https://github.com e criar um novo repositorio
 
@@ -16,7 +16,7 @@ Creating a repository on GitHub step by step
 6 - Enviar primeiro commit: git push -u origin master
 
 
-Para enviar um repositorio já existente, basta seguir os passo 0, 5 e 6.
+Para ENVIAR um repositorio já existente, basta seguir os passo 0, 5 e 6.
 
 0 - Ir para https://github.com e criar um novo repositorio
 
@@ -24,4 +24,8 @@ Para enviar um repositorio já existente, basta seguir os passo 0, 5 e 6.
 	git remote add origin git@github.com:jrobertolima/nomedoprojeto.git
 	
 6 - Enviar primeiro commit: git push -u origin master
+
+
+Para BUSCAR um repositorio já existente
+git clone http(s)://github.com/jrobertolima/caminho-do-projeto
 
