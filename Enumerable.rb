@@ -71,9 +71,9 @@ module Enumerable
 	
 	def my_none?
 		if block_given?
-			res = my_all? {|x| yield(x) == false}
+			res = self.my_all? {|x| yield(x) == false}
 		else
-			res = my_all? {|x| x == false}
+			res = self.my_all? {|x| x == false}
 		end
 		
 		return res
@@ -81,9 +81,9 @@ module Enumerable
 	
 	def my_count(*item)
 		if block_given?
-			res = my_select {|x| yield(x)}
+			res = self.my_select {|x| yield(x)}
 		elsif !item.empty?
-			res = my_select {|x| x == item[0]}
+			res = self.my_select {|x| x == item[0]}
 		else	
 			res = self
 		end
@@ -92,6 +92,13 @@ module Enumerable
 	end
 	
 	def my_map
+		if block_given?
+			res = self.my_select {|x| yield(x)}
+		else
+			res = self.my_select
+		end
+		
+		return res
 		
 	end
 	
@@ -100,6 +107,6 @@ module Enumerable
 	end
 end	
 	
-p [1,2,3,-2, 0,5,3].my_count # {|x| x > 1}
+p [1,2,3,-2, 0,5,3].my_map {|x| x > 1}
 	
 	
