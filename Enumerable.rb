@@ -22,11 +22,21 @@ module Enumerable
 	end
 	
 	def my_select
-		self.my_each {|x| yield}		
-	
+		arr_res = []
+		if block_given?
+			self.my_each do |item|
+				if yield(item)	
+						arr_res << item
+				end
+			end
+			return(arr_res)
+		else
+			self.to_enum
+		end
+		
 	end
 end	
 	
-	puts [1,2,3,4].my_select {|x| x.even?}
+p [1,2,3,4].my_select {|x| x.even?}
 	
 	
