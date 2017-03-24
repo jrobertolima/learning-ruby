@@ -70,6 +70,7 @@ module Enumerable
 	end
 	
 	def my_none?
+	
 		if block_given?
 			res = self.my_all? {|x| yield(x) == false}
 		else
@@ -80,19 +81,23 @@ module Enumerable
 	end
 	
 	def my_count(*item)
-		if block_given?
+
+		if block_given? #a block was given to method
 			res = self.my_select {|x| yield(x)}
-		elsif !item.empty?
+		elsif !item.empty? #there is one parameter
 			res = self.my_select {|x| x == item[0]}
-		else	
+		else 	
 			res = self
 		end
 		
 		return res.length	
 	end
 	
-	def my_map
-		if block_given?
+	def my_map(&code_block)
+		
+		if code_block #There is a Proc passed as parameter
+			res = self.my_select {|x| code_block.call(x)}
+		elsif block_given? # a block was given to the method
 			res = self.my_select {|x| yield(x)}
 		else
 			res = self.my_select
@@ -105,12 +110,22 @@ module Enumerable
 	def my_inject
 		
 	end
+	
+=begin
+	def my_map(&code_block)
+		return self.my_select {|x| code_block.call(x)}
+	end
+=end
+	
 end	
 
 def multiply_els(arr)
 
 end
 	
+#p [1,2,3,-2, 0,5,3].my_map {|x| x > 1}
+
+code_block =  Proc.new {|x| x <= 2}
+
 p [1,2,3,-2, 0,5,3].my_map {|x| x > 1}
-	
 	
