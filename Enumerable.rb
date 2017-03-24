@@ -103,9 +103,13 @@ module Enumerable
 	end
 	
 	def my_inject
-	
+		
 	end
 end	
+
+def multiply_els(arr)
+
+end
 	
 p [1,2,3,-2, 0,5,3].my_map {|x| x > 1}
 	
