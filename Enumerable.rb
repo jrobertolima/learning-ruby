@@ -1,12 +1,14 @@
 module Enumerable
 
 	def my_each
+
+		arr_res = self.to_a
 		if block_given?
-			for i in (0..self.length-1) do
-				yield(self[i])
+			for i in (0..arr_res.length-1) do
+				yield(arr_res[i])
 			end
 		else
-			self.to_enum
+			arr_res.to_enum
 		end
 	end
 	
@@ -102,11 +104,32 @@ module Enumerable
 		
 	end
 	
-	def my_inject
-	
+	def my_inject(*args)
+
+		args_size = args.length #get number of par
+		arr_res = self.to_a
+
+		if block_given?
+			args_size == 0 ? memo = self.to_a[0] : memo = args[0] #memo initial value 
+			self.my_each {|item| memo = yield(memo,item)}
+
+		elsif args_size == 1 #it is a symbol by method definition
+			memo = 0
+			arr_res.my_each {|item| memo = memo.method(args[0]).call item}
+
+		elsif args_size == 2
+			memo = args[0]
+			arr_res.my_each {|item| memo = memo.method(args[1]).call item}
+
+		end
+		
+
+		return memo
+		
 	end
 end	
 	
-p [1,2,3,-2, 0,5,3].my_map {|x| x > 1}
+p ["abcd"].inject(:upcase) #1) {|prod, x| prod*x}
+
 	
 	
