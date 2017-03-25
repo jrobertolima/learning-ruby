@@ -112,15 +112,22 @@ module Enumerable
 	def my_inject(*args)
 
 		args_size = args.length #get number of par
-		arr_res = self.to_a
+		arr_res = self.to_a #in case of self is a Enumeration
 
 		if block_given?
-			args_size == 0 ? memo = self.to_a[0] : memo = args[0] #memo initial value 
-			self.my_each {|item| memo = yield(memo,item)}
+				args_size == 0 ? memo = arr_res[0] : memo = args[0] #memo initial value 
+				
+				self.my_each {|item| memo = yield(memo,item)}
 
 		elsif args_size == 1 #it is a symbol by method definition
-			memo = 0
-			arr_res.my_each {|item| memo = memo.method(args[0]).call item}
+				
+				if args[0] == :+ #? memo = 0 : memo = 1 # sets initial memo value, that depends on the operation plus or multiply
+					arr_res[0].is_a?(String) ? memo = "" : memo = 0
+				else
+					arr_res[0].class != arr_res[1].class ? memo = arr_res[0] : memo = 1				
+				end
+				
+				arr_res.my_each {|item| memo = memo.method(args[0]).call item if item.is_a?(Integer) || (args[0] == :+)}
 
 		elsif args_size == 2
 			memo = args[0]
@@ -128,26 +135,17 @@ module Enumerable
 
 		end
 		
-
 		return memo
 	end
-			
-=begin
-	def my_map(&code_block)
-		return self.my_select {|x| code_block.call(x)}
->>>>>>> 404b50c6aa1ecdb7899771cbd3053889d6adcf81
-	end
-=end
-	
+				
 end	
 
 def multiply_els(arr)
-
+	arr.my_inject(:*)
 end
 	
-#p [1,2,3,-2, 0,5,3].my_map {|x| x > 1}
 
-code_block =  Proc.new {|x| x <= 2}
+# p ["ab",2].my_inject(:*)
+p multiply_els(["3",2])
 
-p [1,2,3,-2, 0,5,3].my_map {|x| x > 1}
 	
