@@ -85,11 +85,13 @@ module Enumerable
 				break	
 			end
 		end
+		
 		return(res)			
 	end
 	
 	def my_none?
-	
+		res = false
+		
 		if block_given?
 			res = self.my_all? {|x| yield(x) == false}
 		else
@@ -100,7 +102,8 @@ module Enumerable
 	end
 	
 	def my_count(*item)
-
+		res = []
+		
 		if block_given? #a block was given to method
 			res = self.my_select {|x| yield(x)}
 		elsif !item.empty? #there is one parameter
@@ -113,6 +116,7 @@ module Enumerable
 	end
 	
 	def my_map(&code_block)
+		res = []
 		
 		if code_block #There is a Proc passed as parameter. Execute it!
 			res = self.my_select {|x| code_block.call(x)}
