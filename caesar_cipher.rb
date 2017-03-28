@@ -1,28 +1,33 @@
 def caesar_cipher(letter, shift)
 
-	if letter =~ /\w/	
+	if letter =~ /[a-zA-Z0-9]/	
 		result = letter.ord+shift
-		if result > 122
-			result = (result-122) + 96
-		elsif result.between?(91,96) 
-			result = (result-90) + 64
-		elsif result.between?(58,64) #Dealing with Numbers
-			result = (result - 57) + 47
-		end
+        if letter.ord.between?(65,90) && result > 90 # A-Z. Need rotation
+            result = (result - 65)%26 + 65
+
+        elsif  letter.ord.between?(97,122) && result > 122 #a-z. Need rotation
+            result = (result - 97)%26 + 97		
+		elsif letter =~ /\d/ && result > 57 #Dealing with Numbers and rotation
+			result = ( result - 48)%10 + 48 
+        else
+            result = letter.ord + shift # no need to rotate
+        end   		
 	else
 		result = letter.ord
 	end
 	
-	return result.chr
+	result.chr
 end
 
-puts "Enter a phrase to cipher, please"
-phrase_to_cipher =  gets.chomp
-#
+p "Enter a phrase to cipher, please"
+
+phrase_to_cipher = gets.chomp
+
 #ask for a shift factor. Limting the entry just for fun! 
 shift_factor = 11
+
 until shift_factor < 11
-	puts "Enter your shift factor up to 10"
+	p "Enter your shift factor up to 10"
 	shift_factor = gets.chomp.to_i
 end
 
@@ -32,4 +37,4 @@ new_phrase = ""
 	new_phrase [i] = caesar_cipher(phrase_to_cipher[i],shift_factor)
 end
 
-p new_phrase
+puts new_phrase
