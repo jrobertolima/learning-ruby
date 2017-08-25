@@ -1,0 +1,8 @@
+bubble.rb:              ASCII text, with CRLF line terminators
+caesar_cipher.rb:       ASCII text, with CRLF line terminators
+Enumerable.rb:          ASCII text, with CRLF line terminators
+personYaml.rb:          C++ source, ASCII text, with CRLF line terminators
+stock_picker.rb:        ASCII text, with CRLF line terminators
+string_extensions.rb:   C++ source, ASCII text, with CRLF line terminators
+substrings.rb:          ASCII text, with CRLF line terminators
+tictac.rb:              C++ source, ASCII text, with CRLF line terminators
