@@ -7,6 +7,15 @@ class Entry
     @data = data
     @next = nil
   end
+end
+      
+class LinkedList
+  attr :name
+  
+  def initialize
+    @head = nil
+    @tail = nil
+  end
   
 #Appends a new entry to the end of the list
   def append(newEntry)
@@ -96,23 +105,27 @@ class Entry
       
       return current.data == data  
     end
-end
 
 # represent your LinkedList objects as strings, so you can print them
 # out and preview them in the console.
 # The format should be: ( data ) -> ( data ) -> ( data ) -> nil
     def to_s
-    
+      current = @head 
+      until current.next.nil?
+        print " ( #{current.data } -> "
+      end
+        print "nil"
     end
-    
-    
-    
-class LinkedList
-  attr: name
-  
-  def initialize
-    @head = nil
-    @tail = nil
-  end
-  
-end          
+end   
+
+node = Entry.new("Primeiro")
+ll = LinkedList.new
+node = Entry.new("segundo")
+ll.append(node)
+node = Entry.new("Antes do primeito")
+ll.prepend(node)
+ll.append(Entry.new("Último"))
+ll.to_s
+
+
+       
