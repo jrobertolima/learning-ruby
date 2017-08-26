@@ -1,16 +1,22 @@
 # Implementing a linked list 
 
 class Entry
-  attr :data, :next
+  attr_accessor :data, :next
   
   def initialize(data)
     @data = data
     @next = nil
   end
+
+#  def next(prox)
+ #   @next = prox
+ # end
+
+
 end
       
 class LinkedList
-  attr :name
+  attr_accessor :name
   
   def initialize
     @head = nil
@@ -23,8 +29,8 @@ class LinkedList
       @head = newEntry
       @tail = newEntry 
     else
-      newEntry.next = nil
       @tail.next = newEntry
+      @tail = newEntry
     end    
   end
   
@@ -34,7 +40,7 @@ class LinkedList
       @head = newEntry
       @tail = newEntry 
     else
-      newEntry.next = @head
+      newEntry.next = @head 
       @head = newEntry
     end       
   end
@@ -78,11 +84,12 @@ class LinkedList
       return nil if @head.nil?
       @tail = self.at(self.size-1)
       @tail.next = nil
+#      return tail
     end
     
 # eturns true if the passed in value is in the list
 # and otherwise returns false.   
-    def contains?(value)
+    def contains? (value)
       return false if @head.nil?
       return true if @head.data == value
       
@@ -98,12 +105,14 @@ class LinkedList
     def find(data)
       return nil if @head.nil?
       
+      i = 1
       current = @head
       until current.data == data || i > self.size
-        current = current.next       
+        current = current.next
+        i += 1       
       end    
       
-      return current.data == data  
+      return i #current.data == data  
     end
 
 # represent your LinkedList objects as strings, so you can print them
@@ -111,21 +120,26 @@ class LinkedList
 # The format should be: ( data ) -> ( data ) -> ( data ) -> nil
     def to_s
       current = @head 
-      until current.next.nil?
-        print " ( #{current.data } -> "
+      1.upto(self.size) do
+        print " ( #{current.data} ) -> " 
+        current = current.next
       end
-        print "nil"
+      puts "nil"
     end
 end   
 
 node = Entry.new("Primeiro")
 ll = LinkedList.new
+ll.append(node)
 node = Entry.new("segundo")
 ll.append(node)
-node = Entry.new("Antes do primeito")
-ll.prepend(node)
+ll.prepend(Entry.new("Antes do primeiro"))
 ll.append(Entry.new("Último"))
 ll.to_s
+p ll.at(1).data
+p ll.find("Último")
+p ll.contains? ("nada")
+p ll.contains? ("segundo")
 
 
        
