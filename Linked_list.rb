@@ -7,12 +7,6 @@ class Entry
     @data = data
     @next = nil
   end
-
-#  def next(prox)
- #   @next = prox
- # end
-
-
 end
       
 class LinkedList
@@ -85,9 +79,12 @@ include Enumerable # to include each methdo in the linked list
 #  removes the last element from the list    
     def pop
       return nil if @head.nil?
-      @tail = self.at(self.size-1)
-      @tail.next = nil
-      return @tail
+	  if self.size > 1
+        @tail = self.at(self.size-1) 
+        @tail.next = nil
+	  else
+		@tail = @head = nil
+	  end	
     end
     
 # eturns true if the passed in value is in the list
@@ -108,20 +105,39 @@ include Enumerable # to include each methdo in the linked list
       self.each do |current| 
         return i if current.data == data
         i += 1
-      end  
+      end 
+	  return nil	
     end
 
 # inserts the node at the given index    
     def insert_at(newEntry, index)
-      temp_node = self.at((index-1))
-      newEntry.next = temp_node.next
-      temp_node.next = newEntry
-
-
+	  return false if @head.nil? || index > self.size 
+	  
+	  if self.size == 1 || index == 1
+	    prepend(newEntry) 
+	  else	
+        temp_node = self.at((index-1))
+        newEntry.next = temp_node.next
+        temp_node.next = newEntry
+	  end
+	  return true	
     end
-#remove_at(index) that removes the node at the given index
-#
-(You will need to update the links of your nodes in the list when you remove a node.)    
+#remove_at(index) that removes the node at the given #index (You will need to update the links of your nodes in the list when you remove a node.)    
+	def remove_at(index)
+	  return false if @head.nil? || index > self.size 
+
+	  if self.size == 1 || index == self.size
+	    self.pop 
+	  elsif index == 1
+		@head = @head.next
+	  else	
+	    temp_node = self.at(index)
+	    node_ant	= self.at(index-1)
+	    node_ant.next = temp_node.next
+	    temp_node.next = nil
+      end
+      return true	  
+	end
 # represent your LinkedList objects as strings, so you can print them
 # out and preview them in the console.
 # The format should be: ( data ) -> ( data ) -> ( data ) -> nil
@@ -151,5 +167,21 @@ ll.to_s
 p "Inserindo..."
 ll.insert_at(Entry.new("Inserindo na dois"),2)
 ll.to_s
-
-       
+p "Removendo..."
+ll.remove_at(3)
+ll.to_s
+p "Removendo a 1..."
+ll.remove_at(1)
+ll.to_s       
+p "Removendo útlimo..."
+ll.remove_at(ll.size)
+ll.to_s      
+ll.pop
+ll.remove_at(4)
+ll.to_s
+p ll
+ll.pop
+ll.pop
+ll.to_s
+ll.append(Entry.new("Nova entrada"))
+ll.to_s 
