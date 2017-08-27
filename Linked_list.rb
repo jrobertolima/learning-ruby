@@ -16,6 +16,8 @@ class Entry
 end
       
 class LinkedList
+include Enumerable # to include each methdo in the linked list
+
   attr_accessor :name
   
   def initialize
@@ -24,8 +26,19 @@ class LinkedList
   end
   
 #Appends a new entry to the end of the list
+  def each
+    return nil if @head.nil?
+
+    entry = @head
+
+    until entry.nil?
+      yield entry
+      entry = entry.next
+    end
+  end
+
   def append(newEntry)
-    if head.nil?
+    if @head.nil?
       @head = newEntry
       @tail = newEntry 
     else
@@ -36,7 +49,7 @@ class LinkedList
   
 # Adds a new entry to the top of the list
   def prepend(newEntry)
-    if head.nil?
+    if @head.nil?
       @head = newEntry
       @tail = newEntry 
     else
@@ -48,35 +61,25 @@ class LinkedList
 # returns total number of nodes in the list
   def size
     return if @head.nil?
-    n = 1
-    current = @head
-    until current.next.nil? 
-      current = current.next
-      n += 1
-    end
+    n = 0
+
+    self.each { n += 1}
+
     return n
   end
 
-# returns first entry
-    def head
-      return @head
-    end
-    
-# returns last entry
-    def tail
-      return @tail
-    end
 
 # returns the node at the given index. Firsp node has the position 1
     def at(index)
       return nil if @head.nil?
       return @head if index == 1
-      
-      current = @head
-      1.upto(index) do
-        current = current.next    
+
+      ind = 1
+      self.each do |current|
+        return current if ind == index
+        ind += 1
       end
-      return current
+
     end
 
 #  removes the last element from the list    
@@ -84,7 +87,7 @@ class LinkedList
       return nil if @head.nil?
       @tail = self.at(self.size-1)
       @tail.next = nil
-#      return tail
+      return @tail
     end
     
 # eturns true if the passed in value is in the list
@@ -92,38 +95,38 @@ class LinkedList
     def contains? (value)
       return false if @head.nil?
       return true if @head.data == value
+
+      self.each {|current| return true if current.data == value}
       
-      current = @head    
-      until current.data == value || current.next.nil?
-        current = current.next
-      end
-      
-      return current.data == value    
+      return false 
     end 
 
 # returns the index of the node containing data, or nil if not found.    
     def find(data)
       return nil if @head.nil?
-      
       i = 1
-      current = @head
-      until current.data == data || i > self.size
-        current = current.next
-        i += 1       
-      end    
-      
-      return i #current.data == data  
+      self.each do |current| 
+        return i if current.data == data
+        i += 1
+      end  
     end
 
+# inserts the node at the given index    
+    def insert_at(newEntry, index)
+      temp_node = self.at((index-1))
+      newEntry.next = temp_node.next
+      temp_node.next = newEntry
+
+
+    end
+#remove_at(index) that removes the node at the given index
+#
+(You will need to update the links of your nodes in the list when you remove a node.)    
 # represent your LinkedList objects as strings, so you can print them
 # out and preview them in the console.
 # The format should be: ( data ) -> ( data ) -> ( data ) -> nil
     def to_s
-      current = @head 
-      1.upto(self.size) do
-        print " ( #{current.data} ) -> " 
-        current = current.next
-      end
+      self.each {|current|  print " ( #{current.data} ) -> " }
       puts "nil"
     end
 end   
@@ -140,6 +143,13 @@ p ll.at(1).data
 p ll.find("Último")
 p ll.contains? ("nada")
 p ll.contains? ("segundo")
-
+ll.prepend(Entry.new("Antes do primeiro primeiro"))
+ll.append(Entry.new("Último deṕos do último"))
+ll.to_s
+ll.pop
+ll.to_s
+p "Inserindo..."
+ll.insert_at(Entry.new("Inserindo na dois"),2)
+ll.to_s
 
        
