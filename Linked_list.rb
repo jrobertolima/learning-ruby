@@ -74,7 +74,6 @@ class LinkedList
       return nil if @head.nil? 
       return @head if index == 1
       return nil if index > self.size
-#      ind = 1
       self.each_with_index do |current, ind|
         return current if ind == index
       end
@@ -105,7 +104,7 @@ class LinkedList
 # returns the index of the node containing data, or nil if not found.    
     def find(data)
       return nil if @head.nil?
-#      i = 1
+
       self.each_with_index do |current, ind| 
         return ind if current.data == data
       end 
