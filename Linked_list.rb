@@ -1,5 +1,4 @@
 # Implementing a linked list 
-
 class Entry
   attr_accessor :data, :next
   
@@ -10,27 +9,36 @@ class Entry
 end
       
 class LinkedList
-include Enumerable # to include each methdo in the linked list
-
+  include Enumerable # to include each methdo in the linked list
   attr_accessor :name
   
   def initialize
     @head = nil
     @tail = nil
   end
-  
-#Appends a new entry to the end of the list
+# each method for linked list  
   def each
     return nil if @head.nil?
-
     entry = @head
-
     until entry.nil?
-      yield entry
-      entry = entry.next
+      yield entry, 
+      entry = entry.next    
     end
   end
 
+# each_with_index method for linked list  
+  def each_with_index
+    return nil if @head.nil?
+    node_index = 1 #I'll consider first node as 1 
+    entry = @head
+    until entry.nil?
+      yield entry, node_index
+      entry = entry.next
+      node_index +=1
+    end
+  end
+  
+#Appends a new entry to the end of the list
   def append(newEntry)
     if @head.nil?
       @head = newEntry
@@ -54,24 +62,21 @@ include Enumerable # to include each methdo in the linked list
   
 # returns total number of nodes in the list
   def size
-    return if @head.nil?
+    return 0 if @head.nil?
+
     n = 0
-
     self.each { n += 1}
-
     return n
   end
 
-
-# returns the node at the given index. Firsp node has the position 1
+# returns the node at the given index. First node has the position 1
     def at(index)
-      return nil if @head.nil?
+      return nil if @head.nil? 
       return @head if index == 1
-
-      ind = 1
-      self.each do |current|
+      return nil if index > self.size
+#      ind = 1
+      self.each_with_index do |current, ind|
         return current if ind == index
-        ind += 1
       end
 
     end
@@ -79,19 +84,18 @@ include Enumerable # to include each methdo in the linked list
 #  removes the last element from the list    
     def pop
       return nil if @head.nil?
-	  if self.size > 1
+      if self.size > 1
         @tail = self.at(self.size-1) 
         @tail.next = nil
-	  else
-		@tail = @head = nil
-	  end	
+      else # only 1 node
+        @tail = @head = nil
+      end	
     end
     
-# eturns true if the passed in value is in the list
+# returns true if the passed in value is in the list
 # and otherwise returns false.   
     def contains? (value)
       return false if @head.nil?
-      return true if @head.data == value
 
       self.each {|current| return true if current.data == value}
       
@@ -101,87 +105,90 @@ include Enumerable # to include each methdo in the linked list
 # returns the index of the node containing data, or nil if not found.    
     def find(data)
       return nil if @head.nil?
-      i = 1
-      self.each do |current| 
-        return i if current.data == data
-        i += 1
+#      i = 1
+      self.each_with_index do |current, ind| 
+        return ind if current.data == data
       end 
-	  return nil	
+  	  return nil # not found	
     end
 
 # inserts the node at the given index    
     def insert_at(newEntry, index)
-	  return false if @head.nil? || index > self.size 
-	  
-	  if self.size == 1 || index == 1
-	    prepend(newEntry) 
-	  else	
-        temp_node = self.at((index-1))
-        newEntry.next = temp_node.next
-        temp_node.next = newEntry
-	  end
-	  return true	
+      return false if @head.nil? || index > self.size # will not consider a index out of list
+      
+      if self.size == 1 || index == 1 #list has just 1 node or it is the first one
+        prepend(newEntry) 
+      else	
+          temp_node = self.at((index-1))
+          newEntry.next = temp_node.next
+          temp_node.next = newEntry
+      end
+      return true	
     end
-#remove_at(index) that removes the node at the given #index (You will need to update the links of your nodes in the list when you remove a node.)    
+    
+# removes the node at the given index (You will need to update the links of your nodes in the list when you remove a node.)    
 	def remove_at(index)
 	  return false if @head.nil? || index > self.size 
 
-	  if self.size == 1 || index == self.size
+	  if self.size == 1 || index == self.size #only one node or the last one
 	    self.pop 
-	  elsif index == 1
-		@head = @head.next
+	  elsif index == 1 # first node in the list: shift
+		  @head = @head.next
 	  else	
 	    temp_node = self.at(index)
 	    node_ant	= self.at(index-1)
 	    node_ant.next = temp_node.next
 	    temp_node.next = nil
-      end
+    end
       return true	  
 	end
+
 # represent your LinkedList objects as strings, so you can print them
 # out and preview them in the console.
 # The format should be: ( data ) -> ( data ) -> ( data ) -> nil
     def to_s
-      self.each {|current|  print " ( #{current.data} ) -> " }
-      puts "nil"
-    end
+      res = ""
+      self.each {|current|  res << " ( #{current.data} ) -> " }
+      res <<  "nil"
+      end
 end   
 
-node = Entry.new("Primeiro")
+puts "Creating list..."
 ll = LinkedList.new
-ll.append(node)
-node = Entry.new("segundo")
-ll.append(node)
-ll.prepend(Entry.new("Antes do primeiro"))
-ll.append(Entry.new("Último"))
-ll.to_s
-p ll.at(1).data
-p ll.find("Último")
-p ll.contains? ("nada")
-p ll.contains? ("segundo")
-ll.prepend(Entry.new("Antes do primeiro primeiro"))
-ll.append(Entry.new("Último deṕos do último"))
-ll.to_s
-ll.pop
-ll.to_s
-p "Inserindo..."
-ll.insert_at(Entry.new("Inserindo na dois"),2)
-ll.to_s
-p "Removendo..."
-ll.remove_at(3)
-ll.to_s
-p "Removendo a 1..."
-ll.remove_at(1)
-ll.to_s       
-p "Removendo útlimo..."
-ll.remove_at(ll.size)
-ll.to_s      
-ll.pop
-ll.remove_at(4)
-ll.to_s
-p ll
-ll.pop
-ll.pop
-ll.to_s
-ll.append(Entry.new("Nova entrada"))
-ll.to_s 
+puts ll.to_s
+
+puts "Populating list"
+1.upto(10) do |i|
+   ll.append(Entry.new("node #{i}"))
+end
+puts ll.to_s
+
+puts "Prepending 3 nodes..."
+3.downto(1) do |i|
+   ll.prepend(Entry.new("Pre #{i}"))
+end
+puts ll.to_s
+
+puts "Inserting nodes..."
+2.upto(4) do |i|
+   ll.insert_at(Entry.new("Inserted node #{i}"), i )
+end
+puts ll.to_s
+
+puts "Searching for nodes..."
+puts "Contain 'Nada?' #{ll.contains? ("nada")}"
+puts "Contain 'node 5?' #{ll.contains? ("node 5")}"
+
+puts "Poping 2 nodes..."
+p ll.pop
+p ll.pop
+puts ll.to_s
+
+puts  "Removing nodes at..."
+3.upto(5) do |i|
+  ll.remove_at(i)
+end
+puts ll.to_s
+puts "Removing the last node..."
+p ll.remove_at(ll.size)
+puts ll.to_s      
